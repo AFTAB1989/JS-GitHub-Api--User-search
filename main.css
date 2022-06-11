@@ -1,0 +1,85 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+
+body {
+    background-image: url("abstract-1-1174741.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+#mainbox{
+    font-size: 24px;
+    cursor: pointer;
+    display:inline-block;
+    align-items: right;
+    justify-content: right;
+}
+
+.sidebar_icon {
+    position: fixed;
+    top : 0px;
+    right: 0px;
+    height: 100%;
+    width: 300px;
+    background-color: rgb(63, 144, 224);
+    z-index: 1;
+    padding-top: 100px;
+    overflow-x: hidden;
+}
+
+.sidebar_icon a{
+    padding: 8px 8px 64px 8px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+}
+
+.sidebar_icon a:hover{
+    color: blue;
+}
+
+.sidebar_icon .closebtn{
+    position: absolute;
+    top : 0px;
+    left : 25px;
+    font-size: 36px;
+    margin-right: 32px;
+
+}
+
+h1{
+    font-weight: normal;
+    font-size: 2rem;
+    margin-top: 5rem;
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.big-text{
+    font-weight: bold;
+    font-size: 6rem;
+    line-height: 1;
+    margin: 0 2rem;
+}
+.counter-el{
+    text-align: center;
+    color: indigo;
+
+}
+.counter-el span{
+    font-size: 1.5rem;
+
+}
