@@ -1,75 +1,75 @@
-const daysEl  = document.getElementById('days');
-const hoursEl = document.getElementById('hours');
-const minsEl = document.getElementById('mins');
-const secondsEl  = document.getElementById('seconds');
+const APIURL = "https://api.github.com/users/";
 
+const main = document.getElementById("main");
+const form = document.getElementById("form");
+const search = document.getElementById("search");
 
+getUser("AFTAB1989");
 
-const newYear = '1 jan 2023';
-const eidFitr = '2 jan 2023';
-const eidAdha = '3 jan 2023';
+async function getUser(username) {
+    const resp = await fetch(APIURL + username);
+    const respData = await resp.json();
 
-function fitr(){
-    document.getElementById("body").style.backgroundImage="url(Eid-al-Fitr-wallpapers-hd-768x576.jpg)";
-    document.getElementById("title").innerHTML="Eid-Ul-Fitr";
+    createUserCard(respData);
+
+    getRepos(username);
 }
 
-function azha(){
-    document.getElementById("body").style.backgroundImage="url(eid-al-adha-greeting-with-goat-mosque.jpg)";
-    document.getElementById("title").innerHTML="Eid-Ul-Adha";
+async function getRepos(username) {
+    const resp = await fetch(APIURL + username + "/repos");
+    const respData = await resp.json();
+
+    addReposToCard(respData);
 }
 
+function createUserCard(user) {
+    const cardHTML = `
+        <div class="card">
+            <div>
+                <img class="avatar" src="${user.avatar_url}" alt="${user.name}" />
+            </div>
+            <div class="user-info">
+                <h2>${user.name}</h2>
+                <p>${user.bio}</p>
+                <ul class="info">
+                    <li>${user.followers}<strong>Followers</strong></li>
+                    <li>${user.following}<strong>Following</strong></li>
+                    <li>${user.public_repos}<strong>Repos</strong></li>
+                </ul>
+                <div id="repos"></div>
+            </div>
+        </div>
+    `;
 
-function countdown(){
-    const newYearDate = new Date(newYear);
-    const eidFitrDate = new Date(eidFitr);
-    const eidAdhaDate = new Date(eidAdha);
-    const currentDate = new Date();
-    var occation = newYearDate;
-
-    // switch(occation) {
-    //     case newYearDate:
-    //         occation = newYearDate;
-    //       break;
-    //     case eidFitrDate:
-    //         occation = eidFitrDate;
-    //       break;
-    //     default:
-    //         occation = newYearDate;
-    //   }
-
-    const totalseconds = (occation - currentDate) / 1000;
-
-
-
-    const days = Math.floor(totalseconds / 3600 / 24);
-    const hours = Math.floor(totalseconds / 3600) % 24;
-    const mins = Math.floor(totalseconds / 60) % 60;
-    const seconds =  Math.floor(totalseconds) % 60;
-
-    daysEl.innerHTML  = days;
-    hoursEl.innerHTML = timeFormet(hours);
-    minsEl.innerHTML = timeFormet(mins);
-    secondsEl.innerHTML = timeFormet(seconds);
+    main.innerHTML = cardHTML;
 }
 
-function timeFormet(time){
-    return time < 10 ? (`0${time}`) : time;
+function addReposToCard(repos) {
+    const reposEl = document.getElementById("repos");
+
+    repos
+        .sort((a, b) => b.stargazers_count - a.stargazers_count)
+        .slice(0, 10)
+        .forEach((repo) => {
+            const repoEl = document.createElement("a");
+            repoEl.classList.add("repo");
+
+            repoEl.href = repo.html_url;
+            repoEl.target = "_blank";
+            repoEl.innerText = repo.name;
+
+            reposEl.appendChild(repoEl);
+        });
 }
 
-countdown();
-setInterval(countdown, 1000);
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
+    const user = search.value;
 
-function openfunction(){
-    document.getElementById("sidebar").style.width="300px";
-    document.getElementById("mainbox").style.marginright="300px";
-    document.getElementById("mainbox").innerHTML="cross";
-}
+    if (user) {
+        getUser(user);
 
-function closefunction(){
-    document.getElementById("sidebar").style.width="0px";
-    document.getElementById("mainbox").style.marginright="0px";
-    document.getElementById("mainbox").innerHTML="&#9776; open";
-
-}
+        search.value = "";
+    }
+});
